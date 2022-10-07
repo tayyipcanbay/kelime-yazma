@@ -4,7 +4,7 @@ class Chrono extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            seconds: 6
+            seconds: 60
         };
     }
     render(){
