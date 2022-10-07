@@ -4,7 +4,7 @@ class Chrono extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            seconds: 5
+            seconds: 6
         };
     }
     render(){
@@ -28,8 +28,8 @@ class Chrono extends Component {
         
         return(
             <div>
-                <h1>{this.state.seconds}</h1>
-                <Button id="start" style={{marginTop:'30px'}} variant="primary" onClick={startTimer}>Start Game</Button>
+                <h1 style={{color:'white'}}>{this.state.seconds}</h1>
+                <Button id="start" style={{marginBottom:'40px', marginTop:'30px'}} variant="outline-danger" onClick={startTimer}>Start Game</Button>
             </div>
         )
     }
