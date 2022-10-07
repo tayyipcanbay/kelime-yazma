@@ -4,7 +4,7 @@ class Chrono extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            seconds: 60
+            seconds: 5
         };
     }
     render(){
@@ -20,6 +20,8 @@ class Chrono extends Component {
                 if (seconds === 0) {
                     clearInterval(this.myInterval);
                     this.props.timeUp();
+                    this.props.gameOver();
+                    this.props.setIsActive(false);
                 }
             }, 1000);
         }

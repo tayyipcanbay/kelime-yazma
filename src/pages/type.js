@@ -12,6 +12,7 @@ function Type(){
         topScore:localStorage.getItem("topScore"),
         id:localStorage.getItem("id")
     });
+    const [isActive, setIsActive]=React.useState(false);
     const [words,setWords]=React.useState([]);
     React.useEffect(()=>{
         fetch("https://random-word-api.herokuapp.com/word?number=100")
@@ -23,6 +24,8 @@ function Type(){
     const startTimer=()=>{
         document.getElementById("start").style.display="none";
         document.getElementById("chrono").style.display="block";
+        handleGame();
+        setIsActive(true);
     }
     const timeUp=()=>{
         document.getElementById("chrono").style.display="none";
@@ -31,22 +34,31 @@ function Type(){
     const getInput=()=>{
         return document.getElementById("input").value;
     }
-    //Buradaki interval yazılacak doğru kelime başına score güncellenecek
-    //Chrono ile haberleşip oyun bittiğinde gameOver fonksiyonu çalışacak
-    //GameOver fonksiyonu localStorage daki topScore ile şuanki score 
-    //karşılaştırılacak ve eğer şuanki score büyükse localStorage daki
-    //topScore güncellenecek
-    //Sonrasında Score sayfasına yönlendirilecek
     
-    const handleGame=setInterval(()=>{
-        if(getInput()===words[0]){
-            document.getElementById("inp").value="";
-            document.getElementById("word").innerHTML=words[1];
-            words.shift();
-        }
-    },100);
+    const handleGame=()=>{
+        let score=0;
+        let i=0;
+        let word= words[i];
+        let currentDiv=document.getElementById("current");
+        let nextDiv=document.getElementById("next");
+        
+        setInterval(()=>{
+            currentDiv.innerHTML=word;
+            nextDiv.innerHTML=words[i+1];
+            let input=getInput();
+            console.log(input);
+            if(input===word){
+                i++;
+                word=words[i];
+                document.getElementById("input").value="";
+                score=score+1;
+                document.getElementById("score").innerHTML=score;
+                console.log(score);
+            }
+        },100);
+    }
     const gameOver=()=>{
-
+        alert("Game Over!");
     }
     return (
         <div>
@@ -57,7 +69,7 @@ function Type(){
                     </Col>
                     <Row>
                         <Col>
-                        <h2>Top Score: {user.topScore}</h2>
+                        <h2 id="score">Top Score: {user.topScore}</h2>
                         </Col>
                         <Col>
                         <h2>Username: {user.userName}</h2>
@@ -65,20 +77,20 @@ function Type(){
                     </Row>
                     <Row style={{paddingTop:'30px'}}>
                         <Col className="wordCol">
-                            <div className="wordDiv">
+                            <div id="current" className="wordDiv">
                                 Current Word
                             </div>
                         </Col>
                         <Col className="wordCol">
-                                <Form.Control onChange={getInput} className="inp" type="text" placeholder="Enter text" />
+                                <Form.Control onChange={getInput} id="input" className="inp" type="text" placeholder="Enter text" />
                         </Col>
-                        <Col className="wordCol">
+                        <Col id="next" className="wordCol">
                             <div className="wordDiv">
                                 Next Word
                             </div>                        
                         </Col>
                         <div id="chrono">
-                            <Chrono timeUp={timeUp} startTimer={startTimer}/>
+                            <Chrono setIsActive={setIsActive} gameOver={gameOver} timeUp={timeUp} startTimer={startTimer}/>
                         </div>
                     </Row>
                 </Row>
